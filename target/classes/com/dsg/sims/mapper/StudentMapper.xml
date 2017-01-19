@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 学生信息Mapper -->
+<mapper namespace="com.dsg.sims.mapper.StudentMapper">
+	<!-- 添加学生信息 -->
+	<insert id="addStudent" parameterType="com.dsg.sims.model.Student">
+		INSERT INTO BOOK (
+		BOOK_ID,
+		NAME,
+		AUTHOR,
+		ISBN,
+		PUBLISH_HOUSE,
+		PUBLISH_TIME,
+		BUY_LINK,
+		CLASSES_ID,
+		SCHOOL_ID
+		)
+		VALUES
+		(
+		#{bookId},
+		#{name},
+		#{author},
+		#{isbn},
+		#{publishHouse},
+		#{publishTime},
+		#{buyLink},
+		#{classesId},
+		#{schoolId}
+		)
+	</insert>
+
+	<!-- 删除学生信息 -->
+	<delete id="delStudent">
+		DELETE FROM BOOK
+		WHERE
+		BOOK_ID = #{bookId}
+	</delete>
+
+	<!-- 更新学生信息 -->
+	<update id="updateStudent" parameterType="com.dsg.sims.model.Student">
+		UPDATE BOOK SET
+		NAME = #{name},
+		AUTHOR = #{author},
+		ISBN = #{isbn},
+		PUBLISH_HOUSE = #{publishHouse},
+		PUBLISH_TIME = #{publishTime},
+		BUY_LINK = #{buyLink},
+		CLASSES_ID = #{classesId},
+		SCHOOL_ID = #{schoolId}
+		WHERE BOOK_ID = #{bookId}
+	</update>
+
+	<!-- 根据学生ID查询学生信息 -->
+	<select id="queryStudentById" resultType='com.dsg.sims.model.Student'>
+		select * from
+		BOOK
+		WHERE BOOK_ID = #{bookId}
+	</select>
+
+	<!-- 带参数询所有 -->
+	<select id="queryStudent" parameterType="com.dsg.sims.model.param.QueryConditionData"
+		resultType='com.dsg.sims.model.Student'>
+		select * from BOOK
+		WHERE 1=1
+		<if
+			test=" queryConditionData.classesId != null and queryConditionData.classesId != '' ">
+			AND CLASSES_ID = #{queryConditionData.classesId}
+		</if>
+	</select>
+
+
+	<!-- 查询学生数量 -->
+	<select id="queryStudentCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM
+		BOOK
+	</select>
+
+	<!-- 模糊查询学生信息 -->
+	<select id="queryStudentParam" resultType='com.dsg.sims.model.Student'
+		parameterType="com.dsg.sims.model.param.QueryConditionData">
+		select * from
+		BOOK
+		WHERE 1=1
+		<if test=" bookId != null and bookId != '' ">
+			AND BOOK_ID LIKE CONCAT(CONCAT('%', #{bookId}),'%')
+		</if>
+<!-- 		<if test=" name != null and name != '' "> -->
+<!-- 			AND NAME LIKE CONCAT(CONCAT('%', #{name}),'%') -->
+<!-- 		</if> -->
+<!-- 		<if test=" sex != null and sex != '' "> -->
+<!-- 			AND SEX LIKE CONCAT(CONCAT('%', #{sex}),'%') -->
+<!-- 		</if> -->
+<!-- 		<if test=" birthday != null and birthday != '' "> -->
+<!-- 			AND BIRTHDAY LIKE CONCAT(CONCAT('%', #{birthday}),'%') -->
+<!-- 		</if> -->
+<!-- 		<if test=" citizenId != null and citizenId != '' "> -->
+<!-- 			AND CITIZEN_ID LIKE CONCAT(CONCAT('%', #{citizenId}),'%') -->
+<!-- 		</if> -->
+<!-- 		<if test=" address != null and address != '' "> -->
+<!-- 			AND ADDRESS LIKE CONCAT(CONCAT('%', #{address}),'%') -->
+<!-- 		</if> -->
+<!-- 		<if test=" politicalStatus != null and politicalStatus != '' "> -->
+<!-- 			AND POLITICAL_STATUS LIKE CONCAT(CONCAT('%', #{politicalStatus}),'%') -->
+<!-- 		</if> -->
+<!-- 		<if test=" grade != null and grade != '' "> -->
+<!-- 			AND GRADE LIKE CONCAT(CONCAT('%', #{grade}),'%') -->
+<!-- 		</if> -->
+		<if test=" classesId != null and classesId != '' ">
+			AND CLASSES_ID LIKE CONCAT(CONCAT('%', #{classesId}),'%')
+		</if>
+		<if test=" schoolId != null and schoolId != '' ">
+			AND SCHOOL_ID LIKE CONCAT(CONCAT('%', #{schoolId}),'%')
+		</if>
+
+	</select>
+</mapper>
